@@ -234,7 +234,6 @@ public class GetGPSTracker implements LocationListener {
     }
 
     public String getAnyProviderLocation() {
-        Toast.makeText(mContext, "try to get location", Toast.LENGTH_SHORT).show();
         latitude = 0.0;
         longitude = 0.0;
         providerVal = "cannot get provider";
