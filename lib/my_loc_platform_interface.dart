@@ -23,7 +23,19 @@ abstract class MyLocPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+  Future<String?> getCurrentLocation() {
+    throw UnimplementedError('getCurrentLocation() has not been implemented.');
+  }
+
+  Future<String?> getAndroidVersion() {
+    throw UnimplementedError('getAndroidVersion() has not been implemented.');
+  }
+
+  Future<String?> getAppVersion() {
+    throw UnimplementedError('getAppVersion() has not been implemented.');
+  }
+
+  Future<String?> getArchitecture() {
+    throw UnimplementedError('getArchitecture() has not been implemented.');
   }
 }

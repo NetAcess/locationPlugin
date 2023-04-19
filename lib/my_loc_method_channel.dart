@@ -10,8 +10,26 @@ class MethodChannelMyLoc extends MyLocPlatform {
   final methodChannel = const MethodChannel('my_loc');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+  Future<String?> getCurrentLocation() async {
+    final version = await methodChannel.invokeMethod<String>('getCurrentLocation');
+    return version;
+  }
+
+  @override
+  Future<String?> getAndroidVersion() async {
+    final version = await methodChannel.invokeMethod<String>('getAndroidVersion');
+    return version;
+  }
+
+  @override
+  Future<String?> getAppVersion() async {
+    final version = await methodChannel.invokeMethod<String>('getAppVersion');
+    return version;
+  }
+
+  @override
+  Future<String?> getArchitecture() async {
+    final version = await methodChannel.invokeMethod<String>('getArchitecture');
     return version;
   }
 }

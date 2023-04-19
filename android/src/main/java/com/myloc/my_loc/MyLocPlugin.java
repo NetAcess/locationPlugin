@@ -1,13 +1,13 @@
 package com.myloc.my_loc;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
-import io.flutter.embedding.engine.plugins.activity.ActivityAware;
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -30,7 +30,7 @@ public class MyLocPlugin implements FlutterPlugin, MethodCallHandler {
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    if (call.method.equals("getPlatformVersion")) {
+    if (call.method.equals("getCurrentLocation")) {
       System.out.println("MyContext is " + context);
       GetGPSTracker gps = new GetGPSTracker(context);
       String lat = gps.getLatitude() + "";
@@ -43,6 +43,36 @@ public class MyLocPlugin implements FlutterPlugin, MethodCallHandler {
         }
       }
       result.success(lat + "$" + lon);
+
+    } else if(call.method.equals("getAndroidVersion")) {
+      String androidVersion = "N/A";
+      try {
+        androidVersion = Build.VERSION.RELEASE;
+      } catch (Exception e) {
+        androidVersion = "N/A";
+      }
+      result.success(androidVersion);
+
+    } else if(call.method.equals("getAppVersion")) {
+      String versionName = "N/A", buildNumber = "N/A";
+      PackageManager packageManager = context.getPackageManager();
+      try {
+        PackageInfo info = packageManager.getPackageInfo(context.getPackageName(), 0);
+        buildNumber = String.valueOf(info.versionCode);
+        versionName = info.versionName;
+      } catch (PackageManager.NameNotFoundException e) {
+        buildNumber = "N/A";
+        versionName = "N/A";
+      }
+      result.success(versionName + "$" + buildNumber);
+    } else if (call.method.equals("getArchitecture")) {
+      String arch = "N/A";
+      try {
+        arch = System.getProperty("os.arch");
+      } catch (Exception e) {
+        arch = "N/A";
+      }
+      result.success(arch);
     } else {
       result.notImplemented();
     }

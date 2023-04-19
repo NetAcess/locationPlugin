@@ -16,35 +16,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   final _myLocPlugin = MyLoc();
+
+  String _platformVersion = 'Unknown';
+  String _androidVersion = '-';
+  String _appVersion = '-';
+  String _getArch = '-';
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _myLocPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
@@ -54,8 +35,73 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Text('Running on: $_platformVersion\n'),
+            ),
+            ElevatedButton(onPressed: () async {
+              String platformVersion = "";
+              try {
+                platformVersion = await _myLocPlugin.getCurrentLocation() ?? 'Unknown platform version';
+              } on PlatformException {
+                platformVersion = 'Failed to get platform version.';
+              }
+              setState(() {
+                _platformVersion = platformVersion;
+              });
+            }, child: Text("GetCurrentLoc")),
+
+            Center(
+              child: Text('Running on: $_androidVersion\n'),
+            ),
+            ElevatedButton(onPressed: () async {
+              String androidVersion = "";
+              try {
+                androidVersion = await _myLocPlugin.getAndroidVersion() ?? 'Unknown android version';
+              } on PlatformException {
+                androidVersion = 'Failed to get android version.';
+              }
+              setState(() {
+                _androidVersion = androidVersion;
+              });
+
+            }, child: Text("getAndroidVersion")),
+
+            Center(
+              child: Text('Running on: $_appVersion\n'),
+            ),
+            ElevatedButton(onPressed: () async {
+              String appVersion = "";
+              try {
+                appVersion = await _myLocPlugin.getAppVersion() ?? 'Unknown app version';
+              } on PlatformException {
+                appVersion = 'Failed to get app version.';
+              }
+              setState(() {
+                _appVersion = appVersion;
+              });
+
+            }, child: Text("GetAppVersion")),
+
+            Center(
+              child: Text('Running on: $_getArch\n'),
+            ),
+            ElevatedButton(onPressed: () async {
+              String getArch = "";
+              try {
+                getArch = await _myLocPlugin.getArchitecture() ?? 'Unknown app version';
+              } on PlatformException {
+                getArch = 'Failed to get app version.';
+              }
+              setState(() {
+                _getArch = getArch;
+              });
+
+            }, child: Text("getArch")),
+          ],
         ),
       ),
     );
