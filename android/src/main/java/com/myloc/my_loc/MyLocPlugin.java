@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -66,11 +67,15 @@ public class MyLocPlugin implements FlutterPlugin, MethodCallHandler {
       }
       result.success(versionName + "$" + buildNumber);
     } else if (call.method.equals("getArchitecture")) {
-      String arch = "N/A";
+      String arch;
       try {
-        arch = System.getProperty("os.arch");
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+          arch = Build.SUPPORTED_ABIS[0];
+        } else {
+          arch = "full";
+        }
       } catch (Exception e) {
-        arch = "N/A";
+        arch = "full";
       }
       result.success(arch);
     } else {
